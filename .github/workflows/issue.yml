@@ -1,0 +1,21 @@
+name: build
+on: push
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.titles }}
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+    - id: set-matrix
+      run: |
+        echo "::set-output name=titles::$( cat list/lists1 )"
+
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{needs.job1.outputs.matrix}}
+    steps:
+    - run: echo ${{ matrix }}

@@ -1,0 +1,25 @@
+name: Create new vendor folder
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'list/lists'
+jobs:
+  build:
+    name: Create vendor
+    runs-on: ubuntu-latest
+    env:
+      TAGS: latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Check out code
+
+      - name: Creating vendor archive
+        run: |
+          pip install Jinja2 jinja2-cli
+          cd list && python3 create.py
+        
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: new vendor
